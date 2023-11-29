@@ -1,12 +1,12 @@
 
-const databaseUsers = require("../../database");
+const database = require("../../database");
 
 const getUsers = (req, res) => {
-  databaseUsers
+  database
     .query("select * from users")
     .then(([users]) => {
       res.status(200).json(users); // use res.json instead of console.log
-      console.log(users);
+      
     })
     .catch((err) => {
       console.error(err);
@@ -17,7 +17,7 @@ const getUsers = (req, res) => {
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
-  databaseUsers
+  database
     .query("select * from users where id = ?", [id])
     .then(([users]) => {
       if (users[0] != null) {
@@ -34,7 +34,7 @@ const getUserById = (req, res) => {
 const postUser = (req, res) => {
   const { firstname, lastname, email, city, language } = req.body;
 
-  databaseUsers
+  database
     .query(
       "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
       [firstname, lastname, email, city, language]
@@ -47,20 +47,21 @@ const postUser = (req, res) => {
       res.sendStatus(500);
     });
 };
+
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
   const { firstname, lastname, email, city, language } = req.body;
 
-  databaseUsers
+  database
     .query(
       "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
-      [ firstname, lastname, email, city, language , id]
+      [firstname, lastname, email, city, language, id]
     )
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.status(404);
+        res.sendStatus(404);
       } else {
-        res.status(204);
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
@@ -69,10 +70,11 @@ const updateUser = (req, res) => {
     });
 };
 
+
 module.exports = {
   getUsers,
   getUserById,
   postUser,
-  updateUser
+  updateUser,
 
 };

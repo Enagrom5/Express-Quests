@@ -1,5 +1,3 @@
-
-
 const database = require("../../database");
 
 
@@ -61,9 +59,9 @@ const updateMovie = (req, res) => {
     )
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.status(404);
+        res.sendStatus(404);
       } else {
-        res.status(204);
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
