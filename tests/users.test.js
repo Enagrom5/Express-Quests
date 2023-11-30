@@ -98,7 +98,7 @@ describe("PUT /api/users/:id", () => {
     const updatedUser = {
       firstname: "Madona",
       lastname: "madona",
-      email: "madona@madona.fr",
+      email: "madona@mado.fr",
       city: "LA",
       language: "English",
     };
@@ -155,5 +155,34 @@ describe("PUT /api/users/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+describe("DELETE /api/users/:id", () => {
+  it("should edit user", async () => {
+    const newUser = {
+      firstname: "fifi",
+      lastname: "dudu",
+      email: "fidu@lali.fr",
+      city: "LA",
+      language: "English",
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [newUser.firstname, newUser.lastname, newUser.email, newUser.city, newUser.language]
+    );
+
+    const id = result.insertId;
+
+    
+    const response = await request(app)
+      .delete(`/api/users/${id}`)
+    
+    expect(response.status).toEqual(404);
+    
+    })
+    
+    
+   
+})
 const database = require("../database")
 afterAll(() => database.end());
